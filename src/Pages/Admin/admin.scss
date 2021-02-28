@@ -1,0 +1,15 @@
+.admin-page {
+    padding: 10px;
+    .players-container {
+        margin-top: 10px;
+        .player-info {
+            margin-bottom: 10px;
+            input.ant-input {
+                width: 30%;
+            }
+            .ant-btn {
+                margin-left: 10px;
+            }
+        }
+    }
+}
