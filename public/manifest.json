@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "who am i",
+  "name": "Who am I game",
   "icons": [
     {
       "src": "favicon.ico",
