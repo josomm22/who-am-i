@@ -8,6 +8,7 @@ const Admin = () => {
     const [numberOfPlayers, setNumberOfPlayers] = useState(1);
     const [players, setPlayers] = useState([]);
     const [session, setSession] = useState('');
+    const [playersConfirmed, setPlayersConfirmed] = useState(false);
 
     const onPlayerNumberChange = (value) => {
         setNumberOfPlayers(value);
@@ -27,6 +28,7 @@ const Admin = () => {
 
     const confirmPlayers = () => {
         sendPlayersArrayToDB(players);
+        setPlayersConfirmed(true)
     }
 
     const renderLink = (playerID) => {
@@ -71,6 +73,7 @@ const Admin = () => {
             </div>
             <div>
                 <Button onClick={confirmPlayers}>Confirm Players</Button>
+                <Button disabled={!playersConfirmed}>Start Game</Button>
             </div>
         </div>
     )
