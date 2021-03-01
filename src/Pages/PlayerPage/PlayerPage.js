@@ -1,7 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { getUpdatedPlayerInfo } from '../../api/api'
 
 const PlayerPage = (props) => {
-    return <div>Player{props.match.params.id}</div>
+    const [gameData,setGameData] = useState(null);
+    const { id } = props.match.params
+
+    const updatePlayerInfo = playerID => {
+        getUpdatedPlayerInfo(playerID,(playerInfo) => {
+            console.log("player", playerInfo);
+            setGameData(playerInfo)
+        });
+    };
+
+    useEffect(()=> {
+        updatePlayerInfo(id);
+    },[id]);
+
+    return <div>Player{id}</div>
 }
 
 export default PlayerPage

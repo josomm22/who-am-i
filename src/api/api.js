@@ -1,12 +1,8 @@
 import firebase from '../firebase';
+const db = firebase.firestore();
 
-export function sortDescending(arr) {
-    return arr.sort((a, b) => (a.date < b.date) ? 1 : -1);
-
-};
-
-export function sendPlayersToDB(obj) {
-    firebase.firestore().collection('players').add({
+export function sendPlayerToDB(obj) {
+    db.collection('players').add({
         name: obj.name,
         id: obj.id,
     }).then((docRef) => {
@@ -17,43 +13,43 @@ export function sendPlayersToDB(obj) {
         });
 };
 
+export function sendPlayersArrayToDB(array) {
+    let batch = db.batch();
+    array.forEach(player => {
+        const newRef = db.collection('players').doc(player.id)
+        batch.set(newRef, {
+            name: player.name,
+            id: player.id,
+            session: player.session
+        })
+    });
+    batch.commit().then((docRef) => {
+        console.log("success");
+    })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+};
+
 export function getPlayers() {
-    firebase.firestore().collection("players").get().then((querySnapshot) => {
+    db.collection("players").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(doc);
+            // console.log({ ...doc.data() });
         });
     });
 };
 
-
-export function getPlayersLive(callback) {
-    let players = [];
-
-    var query = firebase.firestore()
-        .collection('players')
-        .orderBy('name', 'desc')
-    // .limit(num);
-
-    // Start listening to the query.
-    query.onSnapshot(function (snapshot) {
-        snapshot.docChanges().forEach(function (change) {
-            if (change.type === 'added') {
-                let message = change.doc.data();
-                players = [...players, message];
-
-            }
-
-
-
-            // console.log(players);
-
-
+export function getUpdatedPlayerInfo(playerID, callback) {
+    let playerInfo = {};
+    db.collection("players").doc(playerID).onSnapshot(
+        (doc => {
+            playerInfo = { ...doc.data() }
+            console.log("Current data: ", playerInfo);
+            callback(playerInfo);
         })
-        callback(players);
-
-
-    });
+    );
 };
+
 export function checkUserDB(user) {
     let photoURL;
     if (!user.photoURL) {
@@ -68,14 +64,14 @@ export function checkUserDB(user) {
     } else {
         photoURL = user.photoURL;
     }
-    return firebase.firestore().collection('users').doc(user.uid).set({
+    return db.collection('users').doc(user.uid).set({
         userName: user.displayName,
         photoURL: photoURL
     })
 };
 export function getUserNameFromUID(uid) {
 
-    return firebase.firestore().collection('users').doc(uid).get().then(function (doc) {
+    return db.collection('users').doc(uid).get().then(function (doc) {
         if (doc.exists) {
             // console.log("Document data:", doc.data().userName);
             let userData = doc.data()
