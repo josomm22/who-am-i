@@ -51,7 +51,7 @@ const PlayerPage = (props) => {
         </audio>
         Player {id}
         <div>
-            Hello: {playerName}
+            Hello {playerName}
         </div>
         {gameData &&
             <div className="info-container">

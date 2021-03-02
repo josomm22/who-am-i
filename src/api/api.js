@@ -74,10 +74,7 @@ export function getUpdatedPlayerInfo(playerID, callback) {
 export function notifyWinner(playerID, isWinner) {
     db.collection('players').doc(playerID).update({
         isWinner: isWinner
-    }).then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-    })
-        .catch((error) => {
+    }).catch((error) => {
             console.error("Error adding document: ", error);
         });
 }

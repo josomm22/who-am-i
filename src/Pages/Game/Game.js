@@ -32,11 +32,11 @@ const Game = ({ players, session }) => {
                 {!!players.length &&
                     <ul>
                         {players.map((player, index) =>
-                            <li>
+                            <li key={`player-${index}`}>
                                 {player.name}
                             selected:
                             <Switch checked={player.id === selectedPlayer} onChange={() => setSelectedPlayer(player.id)} />
-                            <Checkbox onChange={(event) => onWinnerCheckboxChange(event, player.id)}/>
+                            <Checkbox disabled={player.id !== selectedPlayer} onChange={(event) => onWinnerCheckboxChange(event, player.id)}/>
                             </li>
                         )}
                     </ul>

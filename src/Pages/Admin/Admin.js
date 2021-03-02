@@ -15,15 +15,21 @@ const Admin = () => {
         setNumberOfPlayers(value);
     }
 
-    const onEnterPlayer = (e) => {
+    const onEnterPlayer = (e, index) => {
         const { value } = e.target;
-        const playerID = crypto.randomBytes(3).toString('hex');
-        let newPlayer = {
-            name: value,
-            id: playerID,
-            session: session
-        };
-        setPlayers([...players, newPlayer])
+        if (players[index]){
+            let updatedPlayersList = players;
+            updatedPlayersList[index].name = value;
+            setPlayers(updatedPlayersList);
+        }else {
+            const playerID = crypto.randomBytes(3).toString('hex');
+            let newPlayer = {
+                name: value,
+                id: playerID,
+                session: session
+            };
+            setPlayers([...players, newPlayer]);
+        }
     }
 
     const confirmPlayers = () => {
@@ -80,7 +86,9 @@ const Admin = () => {
                 <Button onClick={confirmPlayers}>Confirm Players</Button>
                 <Button disabled={!playersConfirmed}>Start Game</Button>
             </div>
-            <Game players={players} session={session}/>
+            {playersConfirmed &&
+                <Game players={players} session={session} />
+            }
         </div>
     )
 }
