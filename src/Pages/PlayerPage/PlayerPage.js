@@ -17,7 +17,7 @@ const PlayerPage = (props) => {
 
     return <div>
         Player {id}
-        {gameData.name &&
+        {gameData &&
             <ul>
                 <li>{gameData.name}</li>
                 <li>{gameData.id}</li>

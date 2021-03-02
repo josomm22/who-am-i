@@ -12,7 +12,6 @@ const Admin = () => {
 
     const onPlayerNumberChange = (value) => {
         setNumberOfPlayers(value);
-        // setPlayers(new Array(value));
     }
 
     const onEnterPlayer = (e) => {
