@@ -23,7 +23,7 @@ const Game = ({ players, session }) => {
     };
 
     return (
-        <div>
+        <div className="controls-container">
             <div>
                 Word to guess:
                 <Input onChange={onInputWordChange} />

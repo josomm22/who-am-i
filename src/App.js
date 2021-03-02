@@ -1,11 +1,11 @@
 import './App.scss';
 import 'antd/dist/antd.css'
-import firebase from './firebase';
+// import firebase from './firebase';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  // Link
 } from "react-router-dom";
 import Admin from './Pages/Admin';
 import Home from './Pages/Home';

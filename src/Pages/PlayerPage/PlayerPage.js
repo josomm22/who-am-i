@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getUpdatedPlayerInfo } from '../../api/api'
-import useSound from 'use-sound';
 import Confetti from 'react-confetti';
 import kidscheering from '../../assets/sounds/kidscheering.mp3';
 import './playerPage.scss';
@@ -12,62 +11,68 @@ const PlayerPage = (props) => {
     const [isWinner, setIsWinner] = useState(false);
     const { id } = props.match.params;
 
-    const updatePlayerInfo = playerID => {
-        getUpdatedPlayerInfo(playerID, (playerInfo) => {
-            setIsWinner(playerInfo.isWinner);
-            if (playerName !== playerInfo.name) {
-                setPlayerName(playerInfo.name);
-            };
-            if (playerInfo.gameData) {
-                setGameData(playerInfo.gameData);
-                playerInfo.gameData.currentPlayerID === id ? setIsSelectedPlayer(true) : setIsSelectedPlayer(false);
-            };
-        });
-    };
+    const updatePlayerInfo = useCallback((playerID)=>{
+            getUpdatedPlayerInfo(playerID, (playerInfo) => {
+                setIsWinner(playerInfo.isWinner);
+                if (playerName !== playerInfo.name) {
+                    setPlayerName(playerInfo.name);
+                };
+                if (playerInfo.gameData) {
+                    setGameData(playerInfo.gameData);
+                    playerInfo.gameData.currentPlayerID === id ? setIsSelectedPlayer(true) : setIsSelectedPlayer(false);
+                };
+            });
+    },[playerName, id]) 
 
-    const [playOn] = useSound(
-        kidscheering,
-        { volume: 0.25 }
-    );
+    const playSound = useCallback(() => {
+        const audioEl = document.getElementsByClassName("audio-element")[0]
+        audioEl.volume = 0.25;
+        audioEl.play()
+    }, [])
 
     useEffect(() => {
         if (isWinner) {
-            playOn();
+            // playOn()
+            playSound()
             setTimeout(() => { setIsWinner(false) }, 9000);
-        };
-    }, [isWinner]);
+
+        }
+    }, [isWinner,playSound]);
 
     useEffect(() => {
         updatePlayerInfo(id);
-    }, [id]);
+    }, [id, updatePlayerInfo]);
 
 
     return <div className="playerinfo-container">
         {isWinner && <Confetti />}
+        <audio className="audio-element">
+            <source src={kidscheering}/>
+        </audio>
         Player {id}
         <div>
             Hello: {playerName}
         </div>
-            {gameData &&
+        {gameData &&
             <div className="info-container">
                 <div className="bubble">
                     <div className="text-info">
-                    Currently Playing:
+                        Currently Playing:
                     </div>
                     <div className="game-info">
-                    {gameData.currentPlayerName}
+                        {gameData.currentPlayerName}
                     </div>
                 </div>
                 <div className="bubble">
                     <div className="text-info">
-                    Famous person he needs to guess:
+                        Famous person he needs to guess:
                     </div>
                     <div className="game-info">
-                    {gameData.word}
+                        {gameData.word}
                     </div>
                 </div>
-                </div>
-            }
+            </div>
+        }
         {isSelectedPlayer &&
             <div>
                 You have to guess which famous person you are...
