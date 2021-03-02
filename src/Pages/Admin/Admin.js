@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { InputNumber, Input, Button } from 'antd';
 import crypto from 'crypto'
 import { sendPlayersArrayToDB } from '../../api/api';
+import Game from '../Game';
 import './admin.scss';
 
 const Admin = () => {
@@ -26,20 +27,26 @@ const Admin = () => {
     }
 
     const confirmPlayers = () => {
+        let confirmedPlayers = players;
+        confirmedPlayers.forEach(player => {
+            if (!player.id) {
+                player.id = crypto.randomBytes(3).toString('hex')
+            }
+        })
         sendPlayersArrayToDB(players);
         setPlayersConfirmed(true)
     }
 
     const renderLink = (playerID) => {
         const currentLocation = window.location.href
-        const playerLink = currentLocation.substring(0,currentLocation.indexOf("admin")) + `player/${playerID}`
+        const playerLink = currentLocation.substring(0, currentLocation.indexOf("admin")) + `player/${playerID}`
         return playerLink
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const newSessionID = crypto.randomBytes(5).toString('hex');
         setSession(newSessionID)
-    },[])
+    }, [])
 
     return (
         <div className="admin-page">
@@ -55,17 +62,16 @@ const Admin = () => {
                                 className="name-field"
                                 placeholder="Enter Player Name"
                                 size="middle"
-                                // onChange={}
                                 onPressEnter={(event) => onEnterPlayer(event, index)}
                             />
                             <Input
-                            className="id-field"
-                            readOnly
-                            size="middle"
-                            value={players[index] ? renderLink(players[index].id) : ''} 
-                            placeholder="confirm to get player link"
+                                className="id-field"
+                                readOnly
+                                size="middle"
+                                value={players[index] ? renderLink(players[index].id) : ''}
+                                placeholder="confirm to get player link"
                             />
-                            <Button onClick={() => {navigator.clipboard.writeText(players[index] ? renderLink(players[index].id) : null)}}>copy</Button>
+                            <Button onClick={() => { navigator.clipboard.writeText(players[index] ? renderLink(players[index].id) : null) }}>copy</Button>
 
                         </div>
                 )}
@@ -74,6 +80,7 @@ const Admin = () => {
                 <Button onClick={confirmPlayers}>Confirm Players</Button>
                 <Button disabled={!playersConfirmed}>Start Game</Button>
             </div>
+            <Game players={players} session={session}/>
         </div>
     )
 }

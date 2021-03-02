@@ -11,12 +11,12 @@ import Admin from './Pages/Admin';
 import Home from './Pages/Home';
 import PlayerPage from './Pages/PlayerPage';
 function App() {
-  console.log("firebase",firebase)
+  // console.log("firebase",firebase)
 
   return (
     <Router>
-      <div>
-        <nav>
+      <div className="main-container">
+        {/* <nav>
           <ul>
             <li>
               <Link to="/">Home</Link>
@@ -25,10 +25,7 @@ function App() {
               <Link to="/admin">Admin</Link>
             </li>
           </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+        </nav> */}
         <Switch>
           <Route path="/admin">
             <Admin />
@@ -40,22 +37,6 @@ function App() {
         </Switch>
       </div>
     </Router>
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
   );
 }
 
