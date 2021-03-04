@@ -65,7 +65,7 @@ const PlayerPage = (props) => {
                 </div>
                 <div className="bubble">
                     <div className="text-info">
-                        Famous person he needs to guess:
+                        Famous person to guess:
                     </div>
                     <div className="game-info">
                         {gameData.word}

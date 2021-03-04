@@ -71,7 +71,7 @@ const Admin = () => {
                 Number of players:
                 <InputNumber min={1} value={numberOfPlayers} onChange={onPlayerNumberChange} />
             </div>
-            <div className="session-input">Resume Session: <Input placeholder="sessionid" onPressEnter={resumeSession}/></div>
+            <div className="session-input">Resume Session: <Input placeholder="session id" onPressEnter={resumeSession}/></div>
             <div className="players-container">
                 {[...Array(numberOfPlayers)].map(
                     (n, index) =>
