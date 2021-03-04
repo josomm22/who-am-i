@@ -1,5 +1,5 @@
 body {
-    background-color: #F7FCFF;
+    background-color: #fdfdfd;
 }
 .playerinfo-container {
     height: 100%;
@@ -11,10 +11,11 @@ body {
         justify-content: space-around;
         align-items: center;
         .bubble {
+            position: relative;
             height: 200px;
             width: 30%;
             border: 1px solid #eeeeee;
-            border-radius: 20px;
+            border-radius: 5px;
             display: flex;
             flex-direction: column;
             -webkit-box-shadow: 3px 3px 8px -4px rgba(0,0,0,0.75);
@@ -29,6 +30,9 @@ body {
             }
             .text-info {
                 margin-top: 10px;
+                position: absolute;
+                left: 47%;
+                transform: translate(-44%, 0);
             }
             .game-info {
                 display: flex;

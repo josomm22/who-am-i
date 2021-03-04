@@ -49,8 +49,8 @@ const PlayerPage = (props) => {
         <audio className="audio-element">
             <source src={kidscheering}/>
         </audio>
-        Player {id}
-        <div>
+        Player id {id}
+        <div className="player-name">
             Hello {playerName}
         </div>
         {gameData &&

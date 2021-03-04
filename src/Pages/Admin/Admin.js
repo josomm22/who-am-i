@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { InputNumber, Input, Button } from 'antd';
 import crypto from 'crypto'
-import { sendPlayersArrayToDB } from '../../api/api';
+import { sendPlayersArrayToDB, sendSessionInfo, getSession } from '../../api/api';
 import Game from '../Game';
 import './admin.scss';
 
@@ -40,6 +40,7 @@ const Admin = () => {
             }
         })
         sendPlayersArrayToDB(players);
+        sendSessionInfo(session,players)
         setPlayersConfirmed(true)
     }
 
@@ -47,6 +48,16 @@ const Admin = () => {
         const currentLocation = window.location.href
         const playerLink = currentLocation.substring(0, currentLocation.indexOf("admin")) + `player/${playerID}`
         return playerLink
+    }
+
+    const resumeSession = async (event) => {
+        const { value } = event.target;
+        const sessionData = await getSession(value);
+        if (sessionData) {
+            setSession(sessionData.sessionID);
+            setPlayers(sessionData.players);
+            setPlayersConfirmed(true);
+        };
     }
 
     useEffect(() => {
@@ -60,6 +71,7 @@ const Admin = () => {
                 Number of players:
                 <InputNumber min={1} value={numberOfPlayers} onChange={onPlayerNumberChange} />
             </div>
+            <div className="session-input">Resume Session: <Input placeholder="sessionid" onPressEnter={resumeSession}/></div>
             <div className="players-container">
                 {[...Array(numberOfPlayers)].map(
                     (n, index) =>
@@ -68,6 +80,7 @@ const Admin = () => {
                                 className="name-field"
                                 placeholder="Enter Player Name"
                                 size="middle"
+                                value={players[index] ? players[index].name : ''}
                                 onPressEnter={(event) => onEnterPlayer(event, index)}
                             />
                             <Input

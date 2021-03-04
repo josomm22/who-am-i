@@ -12,6 +12,17 @@ export function sendPlayerToDB(obj) {
             console.error("Error adding document: ", error);
         });
 };
+export function sendSessionInfo(sessionID, players) {
+    db.collection('session').doc(sessionID).set({
+        sessionID,
+        players
+    }).then(() => {
+        console.log("session updated");
+    })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+};
 
 export function sendPlayersArrayToDB(array) {
     let batch = db.batch();
@@ -24,7 +35,7 @@ export function sendPlayersArrayToDB(array) {
             isWinner: false
         })
     });
-    batch.commit().then((docRef) => {
+    batch.commit().then(() => {
         console.log("success");
     })
         .catch((error) => {
@@ -44,7 +55,7 @@ export function updateGameStatus(players, selectedPlayerID, word) {
             }
         })
     });
-    batch.commit().then((docRef) => {
+    batch.commit().then(() => {
         console.log("success");
     })
         .catch((error) => {
@@ -54,11 +65,27 @@ export function updateGameStatus(players, selectedPlayerID, word) {
 
 export function getPlayers() {
     db.collection("players").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach(() => {
             // console.log({ ...doc.data() });
         });
     });
 };
+
+export async function getSession(sessionID) {
+
+    let response = await db.collection("session").doc(sessionID).get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+            return doc.data()
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    console.log("response", response)
+    return response
+}
 
 export function getUpdatedPlayerInfo(playerID, callback) {
     let playerInfo = {};
@@ -78,42 +105,3 @@ export function notifyWinner(playerID, isWinner) {
             console.error("Error adding document: ", error);
         });
 }
-
-export function checkUserDB(user) {
-    let photoURL;
-    if (!user.photoURL) {
-        photoURL = `http://via.placeholder.com/150/0000FF/FFFFFF/?text=${user.displayName[0]}`;
-        user.updateProfile({
-            photoURL: photoURL,
-        }).then(function () {
-            // Update successful.
-        }).catch(function (error) {
-            // An error happened.
-        });
-    } else {
-        photoURL = user.photoURL;
-    }
-    return db.collection('users').doc(user.uid).set({
-        userName: user.displayName,
-        photoURL: photoURL
-    })
-};
-export function getUserNameFromUID(uid) {
-
-    return db.collection('users').doc(uid).get().then(function (doc) {
-        if (doc.exists) {
-            // console.log("Document data:", doc.data().userName);
-            let userData = doc.data()
-            return userData;
-
-        } else {
-            // console.log("No such document!");
-            let userData = 'Legacy'
-            return userData;
-
-        }
-    }).catch(function (error) {
-        console.log("Error getting document:", error);
-    });
-
-};
