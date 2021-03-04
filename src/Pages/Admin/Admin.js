@@ -80,7 +80,6 @@ const Admin = () => {
                                 className="name-field"
                                 placeholder="Enter Player Name"
                                 size="middle"
-                                value={players[index] ? players[index].name : ''}
                                 onPressEnter={(event) => onEnterPlayer(event, index)}
                             />
                             <Input
